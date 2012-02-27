@@ -15,6 +15,6 @@ class Api::V1::ProjectsController < Api::V1::BaseController
   end
 
   def find_project
-    @project = Project.find(params[:id])
+    @project = Project.find_by_code(params[:id])
   end
 end
