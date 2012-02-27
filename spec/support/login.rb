@@ -1,15 +1,21 @@
 module LoginMacros
-  def login_as role
-    @user = User.create(:email => "user#{User.count}@mail.com",
-                        :name => "John Smith",
-                        :password => "123456",
-                        :password_confirmation => "123456",
-                        :skype => 'user_skype')
+  def user_for_login(role)
+    user = User.create(:email => "user#{User.count}@mail.com",
+                       :name => "John Smith",
+                       :password => "123456",
+                       :password_confirmation => "123456",
+                       :skype => 'user_skype')
 
     if role == :admin
-      @user.admin = true
-      @user.save!
+      user.admin = true
+      user.save!
     end
+
+    user
+  end
+
+  def login_as role
+    @user = user_for_login(role)
 
     visit new_user_session_path
     fill_in "user_email", :with => @user.email

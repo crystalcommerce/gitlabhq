@@ -123,5 +123,11 @@ Gitlab::Application.routes.draw do
     end
     resources :notes, :only => [:create, :destroy]
   end
+
+  namespace :api do
+    namespace :v1 do
+      resources :projects
+    end
+  end
   root :to => "projects#index"
 end
