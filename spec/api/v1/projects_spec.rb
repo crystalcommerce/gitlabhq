@@ -45,4 +45,48 @@ describe "/api/v1/projects", :type => :api do
       last_response.status.should == 404
     end
   end
+
+  context "create" do
+    let(:admin) { user_with_role(:admin) }
+    let(:url) { "/api/v1/projects" }
+
+    it "creates the project and redirects to the resource" do
+      expect do
+        post url, {
+                    :private_token => admin.private_token,
+                    :project => {
+                      :name => 'NewProject',
+                      :code => 'NPR',
+                      :path => 'newproject'
+                    }
+                  },
+                  {'HTTP_ACCEPT' => 'application/json'}
+      end.to change { Project.count }.by(1)
+
+      project = Project.find_by_code('NPR')
+
+      last_response.status.should == 201
+      last_response.headers["Location"].should == "/api/v1/projects/NPR"
+      last_response.body.should == project.to_json
+    end
+
+    it "responds with the errors if the request was invalid" do
+      expect do
+        post url, {
+                    :private_token => admin.private_token,
+                    :project => {}
+                  },
+                  {'HTTP_ACCEPT' => 'application/json'}
+      end.to change { Project.count }.by(0)
+
+      last_response.status.should == 422
+      last_response.body.should == {
+        'errors' => {
+          'name' => ["can't be blank"],
+          'path' => ["can't be blank"],
+          'code' => ["can't be blank", "is too short (minimum is 3 characters)"]
+        }
+      }.to_json
+    end
+  end
 end
