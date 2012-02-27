@@ -1,5 +1,5 @@
 module LoginMacros
-  def user_for_login(role)
+  def user_with_role(role)
     user = User.create(:email => "user#{User.count}@mail.com",
                        :name => "John Smith",
                        :password => "123456",
@@ -15,7 +15,7 @@ module LoginMacros
   end
 
   def login_as role
-    @user = user_for_login(role)
+    @user = user_with_role(role)
 
     visit new_user_session_path
     fill_in "user_email", :with => @user.email

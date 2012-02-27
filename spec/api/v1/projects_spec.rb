@@ -25,7 +25,7 @@ describe "/api/v1/projects", :type => :api do
     end
 
     it "returns a 404 if the token is valid but the user does not have access" do
-      user2 = user_for_login(:user)
+      user2 = user_with_role(:user)
       get url, {:private_token => user2.private_token}, {'HTTP_ACCEPT' => 'application/json'}
       last_response.body.should == {
         'error' => 'The project you were looking for could not be found.'
