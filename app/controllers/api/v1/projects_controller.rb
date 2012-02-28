@@ -1,5 +1,5 @@
 class Api::V1::ProjectsController < Api::V1::BaseController
-  before_filter :find_project, :only => [:show]
+  before_filter :project, :only => [:show]
 
   before_filter :add_project_abilities
   before_filter :authorize_read_project!, :except => [:create]
@@ -39,7 +39,7 @@ class Api::V1::ProjectsController < Api::V1::BaseController
     respond_with(error, :status => 404)
   end
 
-  def find_project
-    @project = Project.find_by_code(params[:id])
+  def project
+    @project ||= Project.find_by_code(params[:id])
   end
 end
