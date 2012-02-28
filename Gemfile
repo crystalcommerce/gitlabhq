@@ -31,6 +31,8 @@ gem "foreman"
 gem "omniauth-ldap"
 gem 'bootstrap-sass', "1.4.4"
 
+gem 'airbrake'
+
 group :assets do
   gem "sass-rails",   "3.2.3"
   gem "coffee-rails", "3.2.1"
@@ -52,11 +54,11 @@ group :development, :test do
   gem "awesome_print"
   gem "database_cleaner"
   gem "launchy"
-  gem "webmock"
 end
 
 group :test do
   gem "turn", :require => false
   gem "simplecov", :require => false
   gem "shoulda", "~> 3.0.0.beta2"
+  gem "webmock"
 end
