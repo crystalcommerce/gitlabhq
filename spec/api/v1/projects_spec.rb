@@ -89,4 +89,26 @@ describe "/api/v1/projects", :type => :api do
       }.to_json
     end
   end
+
+  context "index" do
+    let(:url)     { "/api/v1/projects" }
+
+    it "returns a list of all of the user's projects" do
+      project1 = Factory(:project)
+      owner = project1.owner
+      project2 = Factory(:project,
+                         :owner => owner,
+                         :name => 'foo',
+                         :code => 'foo',
+                         :path => 'foo')
+      projects = [project1, project2]
+      projects.each {|p| p.add_access(owner, :read)}
+      Factory(:project, :name => 'bar', :code => 'bar', :path => 'bar')
+
+      get url, {:private_token => owner.private_token},
+               {'HTTP_ACCEPT' => 'application/json'}
+      last_response.body.should == projects.to_json
+      last_response.status.should == 200
+    end
+  end
 end

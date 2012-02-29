@@ -2,7 +2,11 @@ class Api::V1::ProjectsController < Api::V1::BaseController
   before_filter :project, :only => [:show]
 
   before_filter :add_project_abilities
-  before_filter :authorize_read_project!, :except => [:create]
+  before_filter :authorize_read_project!, :only => [:show]
+
+  def index
+    respond_with(current_user.projects.order(:created_at))
+  end
 
   def show
     respond_with(@project)
